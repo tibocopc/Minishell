@@ -6,7 +6,7 @@
 /*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:44:27 by aaiache           #+#    #+#             */
-/*   Updated: 2025/08/20 12:04:39 by aaiache          ###   ########.fr       */
+/*   Updated: 2025/08/27 16:24:50 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ int	parse(char **tab, t_env_list *myenv)
 int	main(int ac, char **av, char **envp)
 {
 	char *input;
-	char **tab;
 	t_env_list *myenv;
-	int	retour;
 
 	if (ac > 1)
 	{
@@ -43,12 +41,20 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		input = readline("minishell> ");
-		if (!input)
-			break;
-		tab = ft_split(input, ' ');
-		retour = parse(tab, myenv);
-		free(input);
-		free(tab);
+		if (input[0] != '\0')
+		{
+			add_history(input);
+			t_token *tokens = lexer(input);
+			if (tokens)
+				print_tokens(tokens);
+		}
 	}
 	return (0);
 }
+
+
+
+			// tab = ft_split(input, ' ');
+			// retour = parse(tab, myenv);
+			// free(input);
+			// free(tab);

@@ -6,7 +6,7 @@
 #    By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/19 14:34:39 by aaiache           #+#    #+#              #
-#    Updated: 2025/08/20 12:09:03 by aaiache          ###   ########.fr        #
+#    Updated: 2025/08/27 16:19:13 by aaiache          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,9 @@ RM      = rm -f
 BUILD_DIR = objs
 
 BUILTINS_SRCS = src/builtins/pwd.c src/builtins/cd.c src/builtins/exit.c src/builtins/echo.c src/builtins/env.c
+LEXER_SRCS = src/lexer/lexer.c src/lexer/utils.c
 SRCS = src/main.c src/set_env.c
-ALL_SRCS   = $(SRCS) $(BUILTINS_SRCS)
+ALL_SRCS   = $(SRCS) $(BUILTINS_SRCS) $(LEXER_SRCS)
 
 OBJS       = $(ALL_SRCS:%.c=$(BUILD_DIR)/%.o)
 

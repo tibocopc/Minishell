@@ -6,7 +6,7 @@
 /*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:16:38 by aaiache           #+#    #+#             */
-/*   Updated: 2025/07/30 11:25:04 by aaiache          ###   ########.fr       */
+/*   Updated: 2025/08/27 17:48:13 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 char				*get_next_line(int fd);
+char				*ft_strncpy(char *dest, const char *src, size_t n);
 
 // Bonus
 

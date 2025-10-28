@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
+/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:27:09 by aaiache           #+#    #+#             */
-/*   Updated: 2025/09/01 17:48:59 by aaiache          ###   ########.fr       */
+/*   Updated: 2025/10/16 11:07:20 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-char *substr(const char *src, int start, int len)
+char	*substr(const char *src, int start, int len)
 {
-    char *res = malloc(len + 1);
-    ft_strncpy(res, src + start, len);
-    res[len] = '\0';
-    return res;
+	char	*res;
+
+	res = malloc(len + 1);
+	ft_strncpy(res, src + start, len);
+	res[len] = '\0';
+	return (res);
 }
 
 int	parse_quoted(const char *line, int i, char c, char **value)
 {
 	int	start;
 
-	i++;
-	start = i;
+	start = ++i;
 	while (line[i] && line[i] != c)
 		i++;
 	if (!line[i])
@@ -34,7 +34,10 @@ int	parse_quoted(const char *line, int i, char c, char **value)
 		*value = NULL;
 		return (-1);
 	}
-	*value = ft_substr(line, start, i - start);
+	if (line[start] == '$')
+		*value = ft_substr(line, start - 1, i - start + 2);
+	else
+		*value = ft_substr(line, start, i - start);
 	return (i + 1);
 }
 
@@ -77,7 +80,8 @@ t_token	*lexer(const char *line)
 		else
 		{
 			start = i;
-			while (line[i] && !is_space(line[i]) && !is_special(line[i]) && !is_quote(line[i]))
+			while (line[i] && !is_space(line[i]) && !is_special(line[i])
+				&& !is_quote(line[i]))
 				i++;
 			value = substr(line, start, i - start);
 			tokens = add_token(tokens, value);

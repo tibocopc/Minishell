@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
+/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:44:27 by aaiache           #+#    #+#             */
-/*   Updated: 2025/08/27 16:24:50 by aaiache          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:51:45 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,64 @@ int	parse(char **tab, t_env_list *myenv)
 	return (1);
 }
 
+void	print_cmds(t_cmd *cmds)
+{
+	int (i);
+	while (cmds)
+	{
+		printf("=== Nouvelle commande ===\n");
+		// Nom de la commande
+		if (cmds->cmd_name)
+			printf("cmd_name: %s\n", cmds->cmd_name);
+		// Arguments
+		printf("args:");
+		if (cmds->args)
+		{
+			i = 0;
+			while (cmds->args[i])
+			{
+				printf(" [%s]", cmds->args[i]);
+				i++;
+			}
+		}
+		printf("\n");
+		// Redirections
+		if (cmds->input_redir)
+			printf("input_redir: %s\n", cmds->input_redir);
+		if (cmds->output_redir)
+			printf("output_redir: %s (append=%d)\n", cmds->output_redir,
+				cmds->append);
+		cmds = cmds->next;
+	}
+}
+
 int	main(int ac, char **av, char **envp)
 {
-	char *input;
-	t_env_list *myenv;
+	char		*input;
+	t_env_list	*myenv;
+	t_token		*tokens;
+	t_cmd		*cmd_list;
 
 	if (ac > 1)
 	{
 		printf("minishell: %s: No such file or directory", av[1]);
-		exit (127);
+		exit(127);
 	}
 	myenv = set_env(envp);
 	while (1)
 	{
-		input = readline("minishell> ");
+		input = readline("minishell >");
 		if (input[0] != '\0')
 		{
 			add_history(input);
-			t_token *tokens = lexer(input);
-			if (tokens)
-				print_tokens(tokens);
+			tokens = lexer(input);
+			cmd_list = parse_tokens(tokens);
+			expand_tokens(cmd_list, myenv, 1);
+			if (!cmd_list)
+				free_tokens(tokens);
+			exec_builtins(cmd_list, myenv);
 		}
+		print_cmds(cmd_list);
 	}
 	return (0);
 }
-
-
-
-			// tab = ft_split(input, ' ');
-			// retour = parse(tab, myenv);
-			// free(input);
-			// free(tab);

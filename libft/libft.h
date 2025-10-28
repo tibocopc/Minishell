@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
+/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:16:38 by aaiache           #+#    #+#             */
-/*   Updated: 2025/07/30 11:25:04 by aaiache          ###   ########.fr       */
+/*   Updated: 2025/09/10 14:11:49 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char				*ft_strnstr(const char *big, const char *little,
 int					ft_atoi(const char *nbr);
 void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strdup(const char *s);
-int					ft_strcmp(char *s1, char *s2);
+int					ft_strcmp(const char *s1, const char *s2);
 
 // Fonctions supplementaires
 
@@ -63,6 +63,7 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 char				*get_next_line(int fd);
+char				*ft_strncpy(char *dest, const char *src, size_t n);
 
 // Bonus
 

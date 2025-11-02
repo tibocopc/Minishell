@@ -1,44 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
+/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/29 16:23:30 by aaiache           #+#    #+#             */
-/*   Updated: 2025/10/31 12:39:38 by aaiache          ###   ########.fr       */
+/*   Created: 2025/11/01 17:00:00 by tniagolo          #+#    #+#             */
+/*   Updated: 2025/11/01 16:55:48 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_pwd(void)
+int	ft_isalnum_or_underscore(char c)
 {
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-	{
-		printf("%s\n", cwd);
-		free(cwd);
-		return (0);
-	}
-	else
-	{
-		perror("pwd");
-		return (1);
-	}
+	return (ft_isalnum(c) || c == '_');
 }
 
-void	check_pwd(char **tab)
+int	ft_strlen_while(char *s, int (*f)(char))
 {
 	int	i;
 
 	i = 0;
-	while (tab[i])
+	while (s[i] && f(s[i]))
 		i++;
-	if (i == 1)
-		ft_pwd();
-	else
-		ft_putstr_fd("pwd: too many arguments\n", 2);
+	return (i);
+}
+
+void	free_both(char *a, char *b)
+{
+	free(a);
+	free(b);
 }

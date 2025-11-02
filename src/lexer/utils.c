@@ -6,7 +6,7 @@
 /*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:32:08 by aaiache           #+#    #+#             */
-/*   Updated: 2025/10/14 14:55:23 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/01 16:55:45 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	is_space(char c)
 		return (1);
 	return (0);
 }
+
 void	print_tokens(t_token *t)
 {
 	while (t)
@@ -40,10 +41,11 @@ void	print_tokens(t_token *t)
 		t = t->next;
 	}
 }
+
 t_token	*add_token(t_token *head, char *val)
 {
-	t_token *new;
-	t_token *tmp;
+	t_token	*new;
+	t_token	*tmp;
 
 	new = malloc(sizeof(t_token));
 	new->value = val;

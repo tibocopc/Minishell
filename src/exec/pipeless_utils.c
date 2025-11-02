@@ -1,34 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   pipeless_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/29 16:39:10 by aaiache           #+#    #+#             */
-/*   Updated: 2025/11/01 17:44:34 by xx               ###   ########.fr       */
+/*   Created: 2025/11/01 18:30:00 by tniagolo          #+#    #+#             */
+/*   Updated: 2025/11/01 16:55:49 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_env(char **args, char **env)
+int	handle_input_redir(char *file)
 {
-	int	i;
+	int	fd;
 
-	if (args[1])
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 	{
-		write(2, "env: '", 6);
-		write(2, args[1], ft_strlen(args[1]));
-		write(2, "': No such file or directory\n", 29);
-		return (127);
+		perror(file);
+		return (-1);
 	}
-	i = 0;
-	while (env && env[i])
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	return (0);
+}
+
+int	handle_output_redir(char *file, int append)
+{
+	int	fd;
+
+	if (append)
+		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
 	{
-		if (ft_strchr(env[i], '='))
-			printf("%s\n", env[i]);
-		i++;
+		perror(file);
+		return (-1);
 	}
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
 	return (0);
 }

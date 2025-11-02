@@ -3,45 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
+/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 17:23:42 by aaiache           #+#    #+#             */
-/*   Updated: 2025/08/19 17:38:03 by aaiache          ###   ########.fr       */
+/*   Created: 2025/10/30 16:34:53 by aaiache           #+#    #+#             */
+/*   Updated: 2025/11/01 17:32:00 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
+static void	handle_export_error(char *arg, char *eq)
+{
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(arg, 2);
+	if (eq)
+	{
+		ft_putstr_fd("=", 2);
+		ft_putstr_fd(eq + 1, 2);
+	}
+	ft_putstr_fd("': not a valid identifier\n", 2);
+}
 
+static int	export_with_value(char **args, char ***env, int i)
+{
+	char	*eq;
+	char	*key;
+	char	*value;
 
-// #include <stdio.h>
+	eq = ft_strchr(args[i], '=');
+	*eq = '\0';
+	key = args[i];
+	if (!is_valid_identifier(key))
+	{
+		handle_export_error(args[i], eq);
+		*eq = '=';
+		return (1);
+	}
+	value = eq + 1;
+	update_or_add_env(env, key, value);
+	*eq = '=';
+	return (0);
+}
 
-// t_env_list    *env_push_front(t_env_list *env, const char *key, char *value,
-//         bool is_private)
-// {
-//     t_env_list    *node;
+static int	export_without_value(char **args, char ***env, int i)
+{
+	char	*key;
 
-//     node = malloc(sizeof(t_env_list));
-//     if (!node)
-//         return (NULL);
-//     node->next = env;
-//     node->is_private = is_private;
-//     node->key = key;
-//     node->value = value;
-//     return (node);
-// }
+	key = args[i];
+	if (!is_valid_identifier(key))
+	{
+		handle_export_error(key, NULL);
+		return (1);
+	}
+	update_or_add_env(env, key, NULL);
+	return (0);
+}
 
-// int    main(int ac, char **av, char **envp)
-// {
-//     t_env_list    *env;
-//     char        *sp;
+int	ft_export(char **args, char ***env)
+{
+	int	i;
+	int	ret;
 
-//     env = NULL;
-//     while (*envp)
-//     {
-//         sp = ft_split(*envp++, '=');
-//         env = env_push_front(env, sp[0], sp[1], false);
-//     }
-// }
-
-// void export(tah)
+	if (!args[1])
+		return (print_export(*env), 0);
+	i = 1;
+	ret = 0;
+	while (args[i])
+	{
+		if (ft_strchr(args[i], '='))
+			ret |= export_with_value(args, env, i);
+		else
+			ret |= export_without_value(args, env, i);
+		i++;
+	}
+	return (ret);
+}

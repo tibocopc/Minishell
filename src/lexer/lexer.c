@@ -6,7 +6,7 @@
 /*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:27:09 by aaiache           #+#    #+#             */
-/*   Updated: 2025/10/16 11:07:20 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/01 18:27:18 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	parse_quoted(const char *line, int i, char c, char **value)
 {
 	int	start;
 
-	start = ++i;
+	i++;
+	start = i;
 	while (line[i] && line[i] != c)
 		i++;
 	if (!line[i])
@@ -34,18 +35,13 @@ int	parse_quoted(const char *line, int i, char c, char **value)
 		*value = NULL;
 		return (-1);
 	}
-	if (line[start] == '$')
-		*value = ft_substr(line, start - 1, i - start + 2);
-	else
-		*value = ft_substr(line, start, i - start);
+	*value = ft_substr(line, start, i - start);
 	return (i + 1);
 }
 
 t_token	*lexer(const char *line)
 {
 	int		i;
-	int		start;
-	char	*value;
 	t_token	*tokens;
 
 	tokens = NULL;
@@ -54,38 +50,16 @@ t_token	*lexer(const char *line)
 	{
 		while (is_space(line[i]))
 			i++;
+		if (line[i] == '\0')
+			break ;
 		if (is_quote(line[i]))
-		{
-			if ((i = parse_quoted(line, i, line[i], &value)) == -1)
-			{
-				printf("Error: unclosed quote\n");
-				return (NULL);
-			}
-			tokens = add_token(tokens, value);
-		}
+			tokens = handle_quote(line, &i, tokens);
 		else if (is_special(line[i]))
-		{
-			if ((line[i] == '>' || line[i] == '<') && line[i + 1] == line[i])
-			{
-				value = substr(line, i, 2);
-				i += 2;
-			}
-			else
-			{
-				value = substr(line, i, 1);
-				i += 1;
-			}
-			tokens = add_token(tokens, value);
-		}
+			tokens = handle_special(line, &i, tokens);
 		else
-		{
-			start = i;
-			while (line[i] && !is_space(line[i]) && !is_special(line[i])
-				&& !is_quote(line[i]))
-				i++;
-			value = substr(line, start, i - start);
-			tokens = add_token(tokens, value);
-		}
+			tokens = handle_word(line, &i, tokens);
+		if (!tokens && is_quote(line[i - 1]))
+			return (NULL);
 	}
 	return (tokens);
 }

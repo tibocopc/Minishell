@@ -5,55 +5,44 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 16:52:09 by aaiache           #+#    #+#             */
-/*   Updated: 2025/08/19 17:05:15 by aaiache          ###   ########.fr       */
+/*   Created: 2025/10/29 16:30:54 by aaiache           #+#    #+#             */
+/*   Updated: 2025/10/31 12:36:22 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	is_flag(char *arg)
+void	print_echo(char **args, int i)
 {
-	int	i;
-
-	i = 0;
-	if (arg[i] == '-')
-		i++;
-	else
-		return (0);
-	if (arg[i] == 'n')
+	while (args[i])
 	{
-		while (arg[i] == 'n')
-			i++;
+		printf("%s", args[i]);
+		if (args[i + 1])
+			printf(" ");
+		i++;
 	}
-	else
-		return (0);
-	if (!arg[i])
-		return (1);
-	return (0);
 }
 
-void	ft_echo(char **tab)
+int	ft_echo(char **args)
 {
-	int i;
-	int nl;
+	int	i;
+	int	newline;
+	int	j;
 
-	nl = 0;
 	i = 1;
-	while (is_flag(tab[i]))
+	newline = 1;
+	while (args[i] && ft_strncmp(args[i], "-n", 2) == 0)
 	{
-		i++;
-		nl = 1;
-	}
-	while (tab[i])
-	{
-		ft_putstr_fd(tab[i], 1);
-		if (tab[i + 1])
-			ft_putchar_fd(' ', 1);
+		j = 2;
+		while (args[i][j] == 'n')
+			j++;
+		if (args[i][j] != '\0')
+			break ;
+		newline = 0;
 		i++;
 	}
-	if (nl == 1)
-		return ;
-	ft_putchar_fd('\n', 1);
-	return ;
+	print_echo(args, i);
+	if (newline)
+		printf("\n");
+	return (0);
 }

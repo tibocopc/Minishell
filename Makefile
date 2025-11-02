@@ -5,23 +5,28 @@
 #                                                     +:+ +:+         +:+      #
 #    By: xx <xx@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/08/19 14:34:39 by aaiache           #+#    #+#              #
-#    Updated: 2025/09/19 13:59:19 by xx               ###   ########.fr        #
+#    Created: 2025/10/28 14:31:24 by aaiache           #+#    #+#              #
+#    Updated: 2025/11/02 16:54:38 by xx               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME    = minishell
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -Ilibft -g
+CFLAGS  = -Wall -Wextra -Werror -Ilibft
 RM      = rm -f
 
 BUILD_DIR = objs
 
-BUILTINS_SRCS = src/builtins/pwd.c src/builtins/cd.c src/builtins/exit.c src/builtins/echo.c src/builtins/env.c
-LEXER_SRCS = src/lexer/lexer.c src/lexer/utils.c
-SRCS = src/main.c src/set_env.c
-PARSING_SRCS =  src/parse/parseur.c src/parse/utils.c src/parse/parse.c
-ALL_SRCS   = $(SRCS) $(BUILTINS_SRCS) $(LEXER_SRCS) $(PARSING_SRCS)
+BUILTINS_SRCS = src/builtins/utils.c src/builtins/pwd.c src/builtins/echo.c src/builtins/env.c src/builtins/exit.c \
+				src/builtins/cd.c src/builtins/export.c src/builtins/export_utils.c src/builtins/export_utils2.c \
+				src/builtins/unset.c src/builtins/unset_utils.c
+PARSE_SRCS = src/parseur/parseur.c src/parseur/utils.c src/parseur/expand.c src/parseur/expand_utils.c src/parseur/parseur_utils2.c src/parseur/expand_utils2.c
+LEXER_SRCS = src/lexer/lexer.c src/lexer/utils.c src/lexer/lexer_utils.c
+EXEC_SRCS = src/exec/pipeless.c src/exec/path.c src/exec/pipe.c src/exec/pipeless_utils.c src/exec/pipe_utils.c src/exec/pipe_fork.c
+HEREDOC_SRCS = src/heredoc/heredoc.c src/heredoc/heredoc_utils.c
+SRCS = src/main.c src/env.c src/cleanup.c src/main_utils.c src/input_handler.c
+SIGNALS_SRC = src/Signals/signaux.c src/Signals/signaux_utils.c src/Signals/signaux_modes.c
+ALL_SRCS   = $(SRCS) $(LEXER_SRCS) $(PARSE_SRCS) $(BUILTINS_SRCS) $(EXEC_SRCS) $(SIGNALS_SRC) $(HEREDOC_SRCS)
 
 OBJS       = $(ALL_SRCS:%.c=$(BUILD_DIR)/%.o)
 
@@ -51,9 +56,15 @@ fclean: clean
 
 re: fclean all
 
+valgrind: $(NAME)
+	@echo "$(YELLOW)🔍 Lancement de Valgrind sur ./minishell..."
+	valgrind -q --suppressions=./ignore --trace-children=yes \
+		--leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes \
+		./minishell
+
 bonus: libft $(OBJS_BONUS)
 	@echo "Link des objets bonus pour créer $(NAME)..."
 	$(CC) $(CFLAGS) $(OBJS_BONUS) libft/ft_printf/ft_printf.a libft/libft.a -o $(NAME)
 	@echo "\033[0;32mCompilation bonus terminée avec succès.\033[0m"
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft valgrind

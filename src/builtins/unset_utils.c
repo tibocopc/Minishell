@@ -1,34 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   unset_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/29 16:39:10 by aaiache           #+#    #+#             */
-/*   Updated: 2025/11/01 17:44:34 by xx               ###   ########.fr       */
+/*   Created: 2025/11/01 17:30:00 by tniagolo          #+#    #+#             */
+/*   Updated: 2025/11/01 17:44:18 by xx               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_env(char **args, char **env)
+int	find_env_index(char **env, const char *key, size_t len)
 {
 	int	i;
 
-	if (args[1])
-	{
-		write(2, "env: '", 6);
-		write(2, args[1], ft_strlen(args[1]));
-		write(2, "': No such file or directory\n", 29);
-		return (127);
-	}
 	i = 0;
-	while (env && env[i])
+	while (env[i])
 	{
-		if (ft_strchr(env[i], '='))
-			printf("%s\n", env[i]);
+		if (ft_strncmp(env[i], key, len) == 0 && env[i][len] == '=')
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
+}
+
+void	copy_env_without_index(char **new_env, char **old_env, int skip)
+{
+	int	j;
+
+	j = 0;
+	while (old_env[j])
+	{
+		if (j < skip)
+			new_env[j] = old_env[j];
+		else if (old_env[j + 1])
+			new_env[j] = old_env[j + 1];
+		else
+			break ;
+		j++;
+	}
 }

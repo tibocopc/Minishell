@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:31:28 by aaiache           #+#    #+#             */
-/*   Updated: 2025/11/02 16:28:47 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/05 16:51:49 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,12 +140,14 @@ char							*get_path(char *cmd, char **env);
 char							*search_path_in_dirs(char *cmd, char **allpath);
 
 //--------------------------HEREDOC---------------------//
+void							handle_eof_heredoc(char *delimiter);
 int								handle_heredoc(char *delimiter);
 int								execute_heredoc(char *delimiter);
 void							execute_all_heredocs(t_cmd *cmds);
 
 //--------------------------SIGNALS---------------------//
 void							install_heredoc_child_handlers(void);
+void							install_heredoc_parent_handlers(void);
 void							set_shell_mode(t_shell_mode mode);
 void							set_prompt_mode(void);
 void							set_exec_mode(void);
@@ -153,6 +155,8 @@ void							sigint_prompt(int sig);
 void							set_child_signals_default(void);
 int								exitcode_from_waitstatus(int status,
 									int print_msg);
+void							install_heredoc_parent_handlers(void);
+void							sigint_heredoc_parent(int sig);
 
 //--------------------------EXPANSION--------------------//
 int								ft_isalnum_or_underscore(char c);

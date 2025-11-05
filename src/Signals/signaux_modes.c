@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signaux_modes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:00:00 by tniagolo          #+#    #+#             */
-/*   Updated: 2025/11/01 16:55:47 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/05 16:29:44 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,10 @@ void	set_exec_mode(void)
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+}
+
+void	install_heredoc_parent_handlers(void)
+{
+	signal(SIGINT, sigint_heredoc_parent);
+	signal(SIGQUIT, SIG_IGN);
 }

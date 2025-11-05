@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signaux.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 16:00:00 by tniagolo          #+#    #+#             */
-/*   Updated: 2025/11/01 17:17:53 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/05 16:30:21 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ static void	sigint_heredoc_child(int sig)
 	(void)sig;
 	write(STDOUT_FILENO, "\n", 1);
 	exit(130);
+}
+
+void	sigint_heredoc_parent(int sig)
+{
+	(void)sig;
+	g_signal = SIGINT;
 }
 
 void	install_heredoc_child_handlers(void)

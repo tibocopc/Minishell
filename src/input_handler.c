@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 20:00:00 by tniagolo          #+#    #+#             */
-/*   Updated: 2025/11/02 16:54:39 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/05 16:27:46 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,14 @@ void	process_input(char *input, char ***myenv, int *exit_status)
 	{
 		add_history(input);
 		if (pipe_syntax(tokens) == 1)
-		{
-			free_tokens(tokens);
-			return ;
-		}
+			return (free_tokens(tokens), (void)0);
 		cmds = parse_tokens(tokens);
 		free_tokens(tokens);
 		if (cmds)
 		{
 			execute_all_heredocs(cmds);
+			if (g_signal == SIGINT)
+				return (*exit_status = 130, free_cmds(cmds), (void)0);
 			expand_tokens(cmds, *myenv, exit_status);
 		}
 		if (cmds && ((cmds->args && cmds->args[0]) || cmds->input_redir

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xx <xx@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: aaiache <aaiache@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:00:00 by xx                #+#    #+#             */
-/*   Updated: 2025/11/02 16:29:56 by xx               ###   ########.fr       */
+/*   Updated: 2025/11/05 16:45:58 by aaiache          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	handle_eof_heredoc(char *delimiter)
+void	handle_eof_heredoc(char *delimiter)
 {
 	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
 	ft_putstr_fd("end-of-file (wanted `", 2);
